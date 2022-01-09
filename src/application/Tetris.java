@@ -49,12 +49,12 @@ public class Tetris extends Application {
 	Stage gameStage = new Stage();
 	Stage scoreboardStage = new Stage();
 	
-	StackPane root = new StackPane();   
-    Scene scene = new Scene(root,450,600);
-    Text tetrisText = new Text("TETRIS");
-    Text playText = new Text("Play - press ENTER");
-    Text scoreboardText = new Text("Scoreboard - press S");
-    Text exitText = new Text("Exit - press E");
+	StackPane paneMenu = new StackPane();   
+    Scene sceneMenu = new Scene(paneMenu,450,600);
+    
+    StackPane paneScoreboard = new StackPane();
+    Scene sceneScoreboard = new Scene(paneScoreboard,450,600);
+    
 
 	public static void main(String[] args) {
 		launch(args);
@@ -85,31 +85,75 @@ public class Tetris extends Application {
 	    	  myReader.close();
 	      }
         
+		
 		//Main Menu
 		
-		//Position der Texte
+		Text tetrisText = new Text("TETRIS");
+	    Text playText = new Text("Play - press ENTER");
+	    Text scoreboardText = new Text("Scoreboard - press S");
+	    Text exitText = new Text("Exit - press E");
+		
         playText.setTranslateY(-75);
         exitText.setTranslateY(75);
         tetrisText.setTranslateY(-200);
         
-        actionMenuKeyPress(playText);
+        actionMenuKeyPress(menuStage);
         tetrisText.setStyle("-fx-fill: blue; -fx-font: 40 arial");
         playText.setStyle("-fx-font: 20 arial;");
         scoreboardText.setStyle("-fx-font: 20 arial;");
         exitText.setStyle("-fx-font: 20 arial;");
         
-        root.getChildren().add(playText); 
-        root.getChildren().add(scoreboardText);
-        root.getChildren().add(exitText);
-        root.getChildren().add(tetrisText);
-        menuStage.setScene(scene);  
+        paneMenu.getChildren().add(playText); 
+        paneMenu.getChildren().add(scoreboardText);
+        paneMenu.getChildren().add(exitText);
+        paneMenu.getChildren().add(tetrisText);
+        menuStage.setScene(sceneMenu);  
         menuStage.setTitle("T E T R I S - S T A R T");  
         menuStage.show();
         
+        
         //Scoreboard Screen
         
+        Text scoreboardTitle = new Text("SCOREBOARD");
+        scoreboardTitle.setTranslateY(-200);
+        scoreboardTitle.setStyle("-fx-fill: blue; -fx-font: 40 arial");
+        actionScoreboardKeyPress(scoreboardStage);
         
+        Text score1 = new Text("No Entries Jet");
+        score1.setTranslateY(-100);
+        score1.setStyle("-fx-font: 20 arial;");
         
+        Text score2 = new Text("No Entries Jet");
+        score2.setTranslateY(-50);
+        score2.setStyle("-fx-font: 20 arial;");
+        
+        Text score3 = new Text("No Entries Jet");
+        score3.setTranslateY(0);
+        score3.setStyle("-fx-font: 20 arial;");
+        
+        Text score4 = new Text("No Entries Jet");
+        score4.setTranslateY(50);
+        score4.setStyle("-fx-font: 20 arial;");
+        
+        Text score5 = new Text("No Entries Jet");
+        score5.setTranslateY(100);
+        score5.setStyle("-fx-font: 20 arial;");
+        
+        Text gameTextScoreboard = new Text("Game - ENTER");
+        gameTextScoreboard.setStyle("-fx-font: 20 arial;");
+        gameTextScoreboard.setTranslateY(200);
+        
+        Text menuTextScoreboard = new Text("Menu - M");
+        menuTextScoreboard.setStyle("-fx-font: 20 arial;");
+        menuTextScoreboard.setTranslateY(225);
+        
+		Text exitTextScoreboard = new Text("Exit - E");
+		exitTextScoreboard.setStyle("-fx-font: 20 arial;");
+		exitTextScoreboard.setTranslateY(250);
+        
+        paneScoreboard.getChildren().addAll(scoreboardTitle,score1,score2,score3,score4,score5,gameTextScoreboard,menuTextScoreboard,exitTextScoreboard);
+        scoreboardStage.setScene(sceneScoreboard);
+        scoreboardStage.setTitle("T E T R I S - S C O R E B O A R D");
         
         
         //Game Screen
@@ -140,7 +184,7 @@ public class Tetris extends Application {
 		group.getChildren().addAll(scoretext, line, leveltext, menutext, scoreboardtext, exittext);
 		
 		gameStage.setScene(scene1);
-		gameStage.setTitle("T E T R I S");
+		gameStage.setTitle("T E T R I S - G A M E");
 		
 		Form tempObj = nextObj;
 		group.getChildren().addAll(tempObj.a, tempObj.b, tempObj.c, tempObj.d);
@@ -182,8 +226,8 @@ public class Tetris extends Application {
 		fall.schedule(task, 0, 300); 
 	}
 	
-	private void actionMenuKeyPress(Text text) {
-		scene.setOnKeyPressed(new EventHandler<KeyEvent>() {
+	private void actionMenuKeyPress(Stage stage) {
+		sceneMenu.setOnKeyPressed(new EventHandler<KeyEvent>() {
 			@Override
 			public void handle(KeyEvent event) {
 				switch (event.getCode()) {
@@ -196,11 +240,9 @@ public class Tetris extends Application {
 					System.exit(0);
 					break;
 				case ENTER:
-					if(!game) {
 		        		gameStage.show();
 		        		game = true;
 		        		menuStage.close();
-					}
 					break;
 				default:
 					break;
@@ -209,6 +251,29 @@ public class Tetris extends Application {
 		});
 	}
 	
+	private void actionScoreboardKeyPress(Stage stage) {
+		sceneScoreboard.setOnKeyPressed(new EventHandler<KeyEvent>() {
+			@Override
+			public void handle(KeyEvent event) {
+				switch (event.getCode()) {
+				case M:
+					menuStage.show();
+					game = false;
+					scoreboardStage.close();
+					break;
+				case E:
+					System.exit(0);
+					break;
+				case ENTER:
+					gameStage.show();
+					game = true;
+					scoreboardStage.close();
+				default:
+					break;
+				}
+			}
+		});
+	}
 
 	private void actionKeyPress(Form form) {
 		scene1.setOnKeyPressed(new EventHandler<KeyEvent>() {
